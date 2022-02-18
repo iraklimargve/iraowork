@@ -1,0 +1,45 @@
+<h1 id="marketTableLabel">All Market</h1>
+
+<p *ngIf="!markets"><em>Loading...</em></p>
+
+<div *ngFor="let market of markets">
+  <h2>{{ market.marketName }}</h2>
+  <div>
+    <table class="table market-table" aria-labelledby="marketTableLabel" *ngIf="markets">
+      <thead>
+        <tr>
+          <th>CompanyName</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let company of market.companyList">
+          <td>{{ company.companyName }}</td>
+          <td>
+            <div *ngIf="isEdit && editIndex == company.companyId && tableIndex == market.marketId">
+              <input type="number" id="changedPrice" class="form-control" value="{{company.price}}" />
+            </div>
+            <div *ngIf="!isEdit || (isEdit && (editIndex != company.companyId || tableIndex != market.marketId))">
+              {{ company.price }}
+            </div>
+          </td>
+          <td>
+            <div *ngIf="isEdit && editIndex == company.companyId && tableIndex == market.marketId">
+              <button (click)="saveChanges(company.companyId, market.marketId)" class="btn btn-secondary">
+                Save
+              </button>
+              <button (click)="cancelEdit()" class="btn btn-secondary" style="margin-left:5px">
+                Cancel
+              </button>
+            </div>
+            <button *ngIf="!isEdit || (isEdit && (editIndex != company.companyId || tableIndex != market.marketId))"
+                    (click)="enableEdit(company.companyId, market.marketId)" class="btn btn-primary">
+              Edit
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
